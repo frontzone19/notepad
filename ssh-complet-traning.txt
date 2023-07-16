@@ -1,0 +1,18 @@
+
+
+		SSH Complate Traning 
+
+	>. cara login ssh ke spesicif directory
+	   example : ssh -t admin@192.168.3.102 "cd /home/admin/notepad ; bash"
+
+	>. cara excute file note txt ke remote host dengan ssh
+	   example : ssh admin@192.168.3.102 "touch /home/admin/notepad/12mei.txt"
+
+	>. copy file/folder ke remote host dengan ssh
+	   example : scp -r Downloads admin@192.168.3.102:/home/admin
+
+	>. copy file/folder dari remote host dengan ssh
+	   example : scp admin@192.168.3.102:/home/admin/notepad/ssh.txt .
+
+	>. copy file direktory dengan scp
+	   scp -r moodle.zip  admin@192.168.3.102:/home/admin 

@@ -1,0 +1,6 @@
+
+
+	1. cek socket linux files
+	   >. systemctl list-unit-files -t socket
+
+

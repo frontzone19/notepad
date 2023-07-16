@@ -1,0 +1,29 @@
+
+	Nat Network
+	
+	Internet => enp2s0 : 144.76.156.55
+
+	vmbr => vmbr99  static IP   : 10.10.10.2-254
+			subnet Mask : 255.255.255.0
+			gateway     : 144.76.154.55
+	
+	
+
+	NAT NETWORK - APPEND TO FILE: /ETC/NETWORK/INTERFACES.
+  
+	auto vmbr99
+	#private sub network
+	iface vmbr99 inet static
+		address  10.10.10.1
+		netmask  255.255.255.0
+		bridge-ports none
+		bridge-stp off
+		bridge-fd 0
+
+
+		post-up   echo 1 [GREATER THAN SHMBOL] /proc/sys/net/ipv4/ip_forward
+		post-up   iptables -t nat -A POSTROUTING -s '10.10.10.0/24' -o enp2s0 -j MASQUERADE
+		post-down iptables -t nat -D POSTROUTING -s '10.10.10.0/24' -o enp2s0 -j MASQUERADE 
+    
+	post-up   iptables -t raw -I PREROUTING -i fwbr+ -j CT --zone 1  
+        post-down iptables -t raw -D PREROUTING -i fwbr+ -j CT --zone 1 

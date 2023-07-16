@@ -1,0 +1,18 @@
+
+		
+		./ mysqldump backup
+	mysqldump -u username -p database_name > data-dump.sql
+	example : sudo mysqldump -u root -p dbworld_x > worldb_x.sql
+
+		./ restore database 
+	mysql -u root -p
+	CREATE DATABASE new_database;
+	mysql -u username -p new_database < data-dump.sql
+
+	example : mysql -u root -p 
+	CREATE DATABASE dbworld;
+	exit;
+	mysql -u root -p dbworld < worldb_x.sql
+
+
+	

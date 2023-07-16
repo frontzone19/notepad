@@ -1,0 +1,5 @@
+
+
+  umount /dev/sdb
+  sudo dd if=/home/admin/ubuntu.iso of=/dev/sdb bs=4M && sync
+

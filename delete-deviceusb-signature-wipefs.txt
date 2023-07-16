@@ -1,0 +1,16 @@
+
+
+	HOW TO DELETE DEVICE SIGNATURE USING WIPEFS COMMAND ON LINUX
+
+	>. sudo lsblk
+        >. sudo umount /dev/sdb
+	>. sudo wipefs -a /dev/sdb
+
+	If it success, it should show something like this
+
+	gamblisfx@gamblisfx-comp:~$ sudo wipefs -a /dev/sdb
+	/dev/sdb: 2 bytes were erased at offset 0x000001fe (dos): 55 aa
+	/dev/sdb: calling ioclt to re-read partition table: Success
+
+	Now check the device using fdisk command
+	>. sudo fdisk -l

@@ -1,0 +1,121 @@
+	
+	Konfigurasi Banyak Server dengan Ansible
+
+	Environment yang digunakan pada tutorial ini:
+
+	Control Node: Ubuntu 20.04 / rasberry pi
+	Managed Nodes: 2x VPS Ubuntu 20.04
+	Host webserver 178.128.55.175
+	Host database 165.22.102.165
+	Ansible v2.12.6
+
+	1. Install SSH key di control Node agar Ansible dapat berkomunikasi dengan Managed Nodes melalui SSH dengan authentication memakai key.
+	>. ssh-keygen
+
+	tanpa password ssh tekan enter, kalo mau dengan password ketikan password host nya
+
+	Misal key disimpan dengan nama ansible.
+	>. /home/admin/.ssh/ansible
+
+	Mengirim key ke host webserver dan database, memakai user root.
+	>. ssh-copy-id -i ~/.ssh/ansible root@178.128.55.175
+	>. ssh-copy-id -i ~/.ssh/ansible root@165.22.102.165
+
+	Menguji koneksi SSH.
+	>. ssh -i ~/.ssh/ansible root@178.128.55.175	
+	>. ssh -i ~/.ssh/ansible root@165.22.102.165	
+
+	Install Ansible
+	>. sudo apt update
+	>. sudo apt install software-properties-common -y
+	>. sudo add-apt-repository --yes --update ppa:ansible/ansible
+	>. sudo apt install ansible -y
+
+	Setting Inventory
+	Ansible menyediakan file Inventory default di /etc/ansible/hosts, tapi bisa juga membuat custom file Inventory sendiri.
+	
+	Membuat folder untuk menyimpan file project Ansible.
+	>. mkdir ansible
+	>. cd ansible
+
+	 Membuat file Inventory, misal diberi nama inventory.
+	>. nano inventory 
+	[all:vars]
+	ansible_user=root
+	ansible_ssh_private_key_file=/home/admin/.ssh/ansible
+
+	[webserver]
+	178.128.55.175
+
+	[database]
+	165.22.102.165
+
+	Mengecek inventory dengan menampilkan semua host yang ada.
+	>. ansible-inventory -i inventory --list	 
+			 
+	Menguji koneksi Ansible ke hosts.
+	>. ansible -i inventory all -m ping 
+
+	Playbook
+	Membuat file Playbook, misal diberi nama playbook.yml.
+	>. nano playbook.yml
+
+	- hosts: all
+	  tasks:
+	    - name: Update apt cache
+	      apt:
+		update_cache: yes
+
+	- hosts: webserver
+	  tasks:
+	   - name: Install Nginx dan PHP
+	     apt:
+	      pkg:
+	      - nginx
+	      - php-fpm 
+	      - php-common
+         - hosts: database
+	   tasks:
+	   - name: Install MariaDB
+	     apt:
+               name: ['mariadb-server', 'python3-mysqldb']
+           - name: Membuat database db_app
+             mysql_db:     
+               name: db_app 
+               state: present
+           - name: Membuat user user_app dan beri hak akses ke db_app
+             mysql_user:
+               name: user_app
+               password: rahasia 
+               priv: 'db_app.*:ALL'
+               state: present
+           - name: Membuat password root MariaDB
+             mysql_user:
+             name: root
+             password: rahasia
+             state: present
+
+	Perintah yang akan dijalankan:
+
+	Update apt cache di semua host
+	Install Nginx dan PHP di host webserver
+	Install MariaDB di host database, buat database, user, dan set password root
+
+
+	Menjalankan playbook.
+	>. ansible-playbook -i inventory playbook.yml  
+
+
+
+	Meenjalankan reboot node ansible
+	
+	- name: Linux Reboot Demo
+	  hosts: rhel7-base
+	  gather_facts: no
+	  remote_user: root
+	  become: true
+ 
+	  tasks:
+	   - name: Reboot the machine (Wait for 5 min)
+	   reboot:
+	   reboot_timeout: 300

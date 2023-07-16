@@ -1,0 +1,33 @@
+
+
+
+		How To Remove "You Do not Have A valid Subscription"
+
+
+	1. To start, backup the file “/usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js” with the following command:
+	   >. cp /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js.backup
+
+	2. Now edit file
+	   >. nano /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js 
+	
+	3. Cari file "No valid subscription"
+	   >. 
+		if (res === null || res === undefined || !res || res
+                        .data.status.toLowerCase() !== 'active') {
+                        Ext.Msg.show({
+                            title: gettext('No valid subscription')
+,
+	4. Replace dengan perintah 
+	   >. 
+		if (false) {
+
+	5. ubah file nya menjadi
+	   >.  
+		 let res = response.result;
+                    if (false) {
+                        Ext.Msg.show({
+                            title: gettext('No valid subscription'),
+                            icon: Ext.Msg.WARNING, 
+
+	6. Restart Proxmox Service
+	   >. systemctl restart pveproxy.service

@@ -1,0 +1,34 @@
+
+
+	CACTI PASSWORD RECORVERY
+
+	>. login as:root
+
+	>. mysql -u mysql -u noc-team -p
+	   Enter password:Ceesde2019!!
+
+	>. MariaDB> show databases;
+	   +--------------------+
+	   | Database           |
+	   +--------------------+
+	   | csd_cacti          |
+	   | information_schema |
+	   | mysql              |
+	   +--------------------+
+
+	>. MariaDB [(none)]>  use csd_cacti;
+	   Database changed
+   
+	>. MariaDB [csd_cacti]> show tables
+
+	>. MariaDB [csd_cacti]> select * from user_auth
+
+	>. MariaDB [csd_cacti]> update user_auth set password=md5(‘admin’) where username=’admin’;
+
+	>. MariaDB [csd_cacti]> show databases;
+
+	>. MariaDB [csd_cacti]> quit;
+
+	>. Try Again Log-In username:admin password:admin
+
+	
